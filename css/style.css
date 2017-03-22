@@ -1,0 +1,41 @@
+header {
+	border-bottom: 1px solid #777;
+}
+
+p {
+	color: #777;
+	margin-bottom: 2px;
+}
+
+.search {
+	margin: 10px 0;
+}
+
+.search input {
+	width: 80%;
+	margin: 0 10px 5px 0;
+	display: inline-block;
+}
+
+.search button {
+	display: inline-block;
+}
+
+.txtal_c {
+	text-align: center;
+}
+
+.avatar, .userinfo {
+	padding: 0 7px;
+}
+
+.userinfo a {
+	font-size: 18px;
+	font-weight: bold;
+	text-decoration: none;
+	color: #777;
+}
+
+.userinfo .login {
+	margin-top: -5px;
+}

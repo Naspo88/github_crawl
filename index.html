@@ -1,13 +1,56 @@
 <!DOCTYPE html>
-<html ng-app="gitCrawl">
+<html lang="en">
 	<head>
+		<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Github Crawl</title>
 		<!-- Stylesheets -->
 		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/style.css">
 		<!-- Script -->
 		<script src="js/angular.min.js"></script>
+		<script src="js/jquery-3.0.0.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/global_fn.js"></script>
 		<script src="js/main.js"></script>
 	</head>
-	<body>
-		I am {{4 + 6}}
+	<body ng-app="gitCrawl">
+		<div class="container">
+			<header>
+				<h3 class="text-muted">Git Hub Crawl</h3>
+			</header>
+			<div class="container-fluid" ng-controller="SearchUser">
+				<form class="row search" name="searchForm" ng-submit="search()" novalidate>
+					<div class="col-md-6 col-md-offset-3 form-group">
+						<input type="text" class="form-control" id="customer" placeholder="Insert user login here..." ng-model="var.text" required>
+						<button type="submit" class="btn btn-primary">Search</button>
+					</div>
+				</form>
+
+				<div class="container row" ng-hide="var.have_user!=true">
+					<aside class="col-md-3 row">
+						<div class="col-md-4 avatar">
+							<img ng-src="{{var.user.avatar_url}}" class="img-circle img-responsive" alt="User avatar">
+						</div>
+						<div class="col-md-8 userinfo">
+							<a class="username" href="{{var.user.html_url}}">{{var.user.name}}</a>
+							<p class="login"><small>( {{var.user.login}} )</small></p>
+							<p><b>Location:</b> {{var.user.location}}</p>
+							<p><b>Followers:</b> {{var.user.followers}}</p>
+							<p><b>Following:</b> {{var.user.following}}</p>
+							<p><b>Repositories:</b> {{var.user.public_repos}}</p>
+						</div>
+					</aside>
+					<section class="col-md-9">
+						<p>Section</p>
+					</section>
+				</div>
+				<div class="container row" ng-hide="var.have_user!=false">
+					<p class="col-md-6 col-md-offset-3 alert alert-warning txtal_c">There is no user with this username on Github</p>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
