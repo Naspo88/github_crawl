@@ -6,9 +6,10 @@
 		$scope.var = {
 			text: "",
 			user: {},
-			repo: {},
+			repos: {},
 			have_user: null
 		};
+
 		$scope.search = function () {
 			ajaxCall.getUser($scope.var.text, function (data) {
 				console.log(data);
@@ -24,5 +25,15 @@
 				});
 			});
 		};
+	});
+
+	app.directive("repoElem", function () {
+		return {
+			restrict: "E",
+			templateUrl: "html/repository_elem.html"
+			// controller: function ($scope) {
+			// 	//
+			// }
+		}
 	});
 })();

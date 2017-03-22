@@ -44,7 +44,9 @@
 						</div>
 					</aside>
 					<section class="col-md-9">
-						<p>Section</p>
+						<ul>
+							<li ng-repeat="repo in var.repos"><repo-elem ng-init="repo"></repo-elem></li>
+						</ul>
 					</section>
 				</div>
 				<div class="container row" ng-hide="var.have_user!=false">
