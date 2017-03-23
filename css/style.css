@@ -18,7 +18,7 @@ li {
     margin: 10px 6px;
 }
 
-li:first-elem {
+li:first-child {
 	margin-top: 0;
 }
 
