@@ -2,6 +2,10 @@ header {
 	border-bottom: 1px solid #777;
 }
 
+aside {
+	margin-bottom: 10px;
+}
+
 p {
 	color: #777;
 	margin-bottom: 2px;
@@ -49,8 +53,14 @@ h4 a {
 	text-align: center;
 }
 
+.avatar {
+	max-width: 100px;
+}
+
 .avatar, .userinfo {
 	padding: 0 7px;
+	display: inline-block;
+    vertical-align: top;
 }
 
 .userinfo a {
