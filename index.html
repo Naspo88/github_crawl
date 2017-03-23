@@ -5,26 +5,26 @@
     	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>Github Crawl</title>
+		<title>Github User Searcher</title>
 		<!-- Stylesheets -->
-		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<link rel="stylesheet" href="css/style.css">
 		<!-- Script -->
-		<script src="js/angular.min.js"></script>
-		<script src="js/jquery-3.0.0.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
+		<script src="https://opensource.keycdn.com/angularjs/1.6.2/angular.min.js"></script>
+		<script src="http://code.jquery.com/jquery-3.0.0.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script src="js/global_fn.js"></script>
 		<script src="js/main.js"></script>
 	</head>
 	<body ng-app="gitCrawl">
 		<div class="container">
 			<header>
-				<h3 class="text-muted">Git Hub Crawl</h3>
+				<h3 class="text-muted">Github User Searcher</h3>
 			</header>
 			<div class="container-fluid" ng-controller="SearchUser">
-				<form class="row search" name="searchForm" ng-submit="search()" novalidate>
+				<form class="row search" name="searchForm" ng-submit="searchTxt()" novalidate>
 					<div class="col-md-6 col-md-offset-3 form-group">
-						<input type="text" class="form-control" id="customer" placeholder="Insert user login here..." ng-model="var.text" required>
+						<input type="text" class="form-control" id="customer" placeholder="Insert username here..." ng-model="var.text" required>
 						<button type="submit" class="btn btn-primary">Search</button>
 					</div>
 				</form>
@@ -32,24 +32,27 @@
 				<div class="container row" ng-hide="var.have_user!=true">
 					<aside class="col-md-3 row">
 						<div class="col-md-4 avatar">
-							<img ng-src="{{var.user.avatar_url}}" class="img-circle img-responsive" alt="User avatar">
+							<img ng-src="{{var.user.avatar}}" class="img-circle img-responsive" alt="User avatar">
 						</div>
 						<div class="col-md-8 userinfo">
-							<a class="username" href="{{var.user.html_url}}">{{var.user.name || "Unknown"}}</a>
+							<a class="username" href="{{var.user.link}}">{{var.user.name}}</a>
 							<p class="login"><small>( {{var.user.login}} )</small></p>
-							<p><b>Location:</b> {{var.user.location || "Unknown"}}</p>
+							<p><b>Location:</b> {{var.user.location}}</p>
 							<p><b>Followers:</b> {{var.user.followers}}</p>
 							<p><b>Following:</b> {{var.user.following}}</p>
-							<p><b>Repositories:</b> {{var.user.public_repos}}</p>
+							<p><b>Repositories:</b> {{var.user.repositories}}</p>
 						</div>
 					</aside>
 					<section class="col-md-9 row">
 						<div class="container-fluid" ng-hide="var.have_repo!=true">
 							<div class="filters row">
-								
+								<div class="col-md-6">
+									<label for="search">Filter repositories by name</label>
+									<input type="text" class="form-control" id="search" placeholder="Insert search here..." ng-model="search">
+								</div>
 							</div>
 							<ul>
-								<li ng-repeat="repo in var.repos | startFrom: (var.currPage-1)*var.elForPage | limitTo: var.elForPage">
+								<li ng-repeat="repo in var.repos | filter: {name: search} | startFrom: (var.currPage-1)*var.elForPage | limitTo: var.elForPage">
 									<repo-elem ng-init="repo"></repo-elem>
 								</li>
 							</ul>
@@ -59,11 +62,12 @@
 								</ul>
 							</div>
 						</div>
-						<p ng-hide="var.have_repo!=false" class="col-md-6 col-md-offset-3 alert alert-warning txtal_c">This user don't have any repositories on Github</p>
+						<p ng-hide="var.have_repo!=false" class="col-md-6 col-md-offset-3 alert alert-warning txtal_c">This user don't have any public repositories on Github</p>
 					</section>
 				</div>
 				<div class="container row" ng-hide="var.have_user!=false">
-					<p class="col-md-6 col-md-offset-3 alert alert-warning txtal_c">There is no user with this username on Github</p>
+					<p ng-hide="var.exceed!=false" class="col-md-6 col-md-offset-3 alert alert-warning txtal_c">There is no user with this username on Github</p>
+					<p ng-hide="var.exceed!=true" class="col-md-6 col-md-offset-3 alert alert-warning txtal_c">API rate limit exceeded. Please wait an hour to make new search</p>
 				</div>
 			</div>
 		</div>

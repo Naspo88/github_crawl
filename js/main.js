@@ -2,8 +2,10 @@
 	var app = angular.module("gitCrawl", []);
 
 	/* CONTROLLERS */
-	app.controller("SearchUser", function ($scope, $filter) {
+	app.controller("SearchUser", function ($scope) {
 
+		/* Scope init */
+		$scope.search = "";
 		$scope.var = {
 			currPage: 1,
 			elForPage: 5,
@@ -12,62 +14,58 @@
 			user: {},
 			repos: {},
 			have_user: null,
-			have_repo: null
+			have_repo: null,
+			exceed: false
 		};
+	
 
-		$scope.search = function () {
+		$scope.searchTxt = function () {
 			$scope.var.currPage = 1;
+			$scope.search = "";
+
 			ajaxCall.getUser($scope.var.text, function (data) {
-				console.log(data);
-				$scope.var.user = data;
-				$scope.var.have_user = !$.isEmptyObject(data);
 
-				if ($scope.var.user.public_repos > 0) {
-					ajaxCall.getRepos(data.repos_url, function (repos) {
-						console.log(repos);
-						$scope.var.have_repo = true;
-						$scope.var.repos = repos;
-						$scope.var.text = "";
-						$scope.var.nPages = (function () {
-							var ret = [];
-							var n = Math.ceil($scope.var.repos.length/$scope.var.elForPage);
-							for (var i = 1; i <= n; i++) {
-								ret.push(i);
-							}
+				if (!data.exceed) {
+					$scope.var.user = data;
+					$scope.var.have_user = !$.isEmptyObject(data);
+					$scope.var.text = "";
+					$('#customer').blur();
 
-							return ret;
-						})();
+					if (data.repositories > 0) {
+						ajaxCall.getRepos(data.repos_url, function (repos) {
+							console.log(repos);
+							$scope.var.have_repo = true;
+							$scope.var.repos = repos;
+
+							$scope.$apply();
+						});
+					} else {
+						$scope.var.have_repo = false;
 
 						$scope.$apply();
-					});
+					}
 				} else {
-					$scope.var.have_repo = false;
-
-					$scope.$apply();
+					$scope.var.text = "";
+					$scope.var.have_user = false;
+					$scope.var.exceed = true;
 				}
 
-				
 			});
 		};
+
+		$scope.$watch('search', function () {
+			var len = global_fn.getFilterLength($scope.var.repos, $scope.search);
+			$scope.var.nPages = global_fn.getPages(len, $scope.var.elForPage);
+		});
 	});
 
 	/* DIRECTIVES */
 	app.directive("repoElem", function () {
 		return {
 			restrict: "E",
-			templateUrl: "html/repository_elem.html",
-			controller: function ($scope) {
-
-				$scope.format = function (date) {
-					var d = new Date (date);
-					var day = d.getDate();
-					var monthIndex = d.getMonth();
-					var year = d.getFullYear();
-
-					return monthNames[monthIndex] + ' ' + day + ', ' + year;
-				};
-
-			}
+			templateUrl: "html/repository_elem.html"
+			// controller: function ($scope) {
+			// }
 		}
 	});
 

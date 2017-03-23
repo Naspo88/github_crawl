@@ -1,5 +1,45 @@
 var s_url = "https://api.github.com/";
 var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var jsonCleaner = {
+	user: function (data) {
+		var user = {
+			name: data.name || "Unknown",
+			login: data.login,
+			location: data.location || "Unknown",
+			followers: data.followers,
+			following: data.following,
+			repositories: data.public_repos,
+			avatar: data.avatar_url,
+			link: data.html_url,
+			repos_url: data.repos_url
+		};
+
+		return user;
+	},
+	repos: function (data) {
+		var repos = [];
+
+		$.each(data, function (id, val) {
+			var elem = {
+				link: val.html_url,
+				name: val.name,
+				id: val.id,
+				created_at: val.created_at,
+				date: global_fn.formatDate(val.created_at),
+				forks: val.forks,
+				watchers: val.watchers,
+				language: val.language || "Unknown",
+				has_issues: val.has_issues,
+				open_issues: val.open_issues,
+				desc: val.description || "No description"
+			};
+
+			repos.push(elem);
+		});
+
+		return repos;
+	}
+};
 var ajaxCall = {
 	call: function (datas, fn) {
 		"use strict";
@@ -15,8 +55,8 @@ var ajaxCall = {
 		});
 
 		call.fail(function(resp) {
-			fn.fail();
-			console.log(resp.responseJSON.message);
+			var is_exceed = (resp.status == 403);
+			fn.fail(is_exceed);
 		});
 	},
 
@@ -27,10 +67,13 @@ var ajaxCall = {
 		};
 		var fn = {
 			done: function (data) {
-				cb(data);
+				cb(jsonCleaner.user(data));
 			},
-			fail: function () {
-				cb({});
+			fail: function (exceed) {
+				var failObj = {};
+				if (exceed)
+					failObj.exceed = true;
+				cb(failObj);
 			}
 		};
 
@@ -44,7 +87,7 @@ var ajaxCall = {
 		};
 		var fn = {
 			done: function (data) {
-				cb(data);
+				cb(jsonCleaner.repos(data));
 			},
 			fail: function () {
 				cb({});
@@ -55,3 +98,38 @@ var ajaxCall = {
 
 	}
 };
+var global_fn = {
+
+	getPages: function (len, elForPage) {
+		var ret = [];
+
+		var n = Math.ceil(len/elForPage);
+		for (var i = 1; i <= n; i++) {
+			ret.push(i);
+		}
+
+		return ret;
+	},
+
+	formatDate: function (date) {
+		var d = new Date (date);
+		var day = d.getDate();
+		var monthIndex = d.getMonth();
+		var year = d.getFullYear();
+
+		return monthNames[monthIndex] + ' ' + day + ', ' + year;
+	},
+
+	getFilterLength: function (array, filter, prop) {
+		prop = prop || "name";
+		var c = 0;
+
+		$.each(array, function (i, val) {
+			if (val[prop].indexOf(filter) >= 0)
+				c++;
+		});
+
+		return c;
+	}
+
+}
