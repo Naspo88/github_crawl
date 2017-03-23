@@ -63,3 +63,26 @@ h4 a {
 .userinfo .login {
 	margin-top: -5px;
 }
+
+.pages ul {
+	display: inline-block;
+}
+
+.pages li {
+	width: 25px;
+    text-align: center;
+    padding: 3px;
+    cursor: pointer;
+    float: left;
+    margin: 0;
+    border-left: none;
+}
+
+.pages li:first-child {
+	border-left: 1px solid #777;
+}
+
+.pages li.current {
+	background: #337ab7;
+	color: #fff;
+}
