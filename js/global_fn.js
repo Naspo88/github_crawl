@@ -10,12 +10,12 @@ var orderingTypes = [
 		label: "Repository Id"
 	},
 	{
-		prop: "language",
-		label: "Main Language"
-	},
-	{
 		prop: "created_at",
 		label: "Cration Date"
+	},
+	{
+		prop: "language",
+		label: "Main Language"
 	},
 	{
 		prop: "forks",
