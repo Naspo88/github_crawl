@@ -46,13 +46,26 @@
 					<section class="col-md-9 row">
 						<div class="container-fluid" ng-hide="var.have_repo!=true">
 							<div class="filters row">
+
 								<div class="col-md-6">
-									<label for="search">Filter repositories by name</label>
-									<input type="text" class="form-control" id="search" placeholder="Insert search here..." ng-model="search">
+									<label for="search">Search by name</label>
+									<input type="text" class="form-control" id="search" placeholder="Insert search here..." ng-model="var.search">
+								</div>
+
+								<div class="col-md-4">
+									<label for="orderRep">Order by</label>
+									<select class="form-control" id="orderRep" ng-model="var.sortBy" ng-options="opt.prop as opt.label for opt in orderingTypes">
+									</select>
+								</div>
+
+								<div class="col-md-2">
+									<label for="asc">Direction</label>
+									<select class="form-control" id="asc" ng-model="var.sortAsc" ng-options="opt.val as opt.lab for opt in dirOption">
+									</select>
 								</div>
 							</div>
 							<ul>
-								<li ng-repeat="repo in var.repos | filter: {name: search} | startFrom: (var.currPage-1)*var.elForPage | limitTo: var.elForPage">
+								<li ng-repeat="repo in var.repos | filter: {name: var.search} | orderBy: var.sortBy : var.sortAsc | startFrom: (var.currPage-1)*var.elForPage | limitTo: var.elForPage as filtered">
 									<repo-elem ng-init="repo"></repo-elem>
 								</li>
 							</ul>

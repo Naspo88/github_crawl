@@ -1,5 +1,36 @@
 var s_url = "https://api.github.com/";
 var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var orderingTypes = [
+	{
+		prop: "name",
+		label: "Repository Name"
+	}, 
+	{
+		prop: "id",
+		label: "Repository Id"
+	},
+	{
+		prop: "language",
+		label: "Main Language"
+	},
+	{
+		prop: "created_at",
+		label: "Cration Date"
+	},
+	{
+		prop: "forks",
+		label: "Number of forks"
+	},
+	{
+		prop: "stars",
+		label: "Number of stars"
+	},
+	{
+		prop: "open_issues",
+		label: "Open Issues"
+	}
+];
+var boolSelectOpt = [{ lab: 'DESC', val: true }, { lab: 'ASC', val: false }];
 var jsonCleaner = {
 	user: function (data) {
 		var user = {
@@ -27,7 +58,7 @@ var jsonCleaner = {
 				created_at: val.created_at,
 				date: global_fn.formatDate(val.created_at),
 				forks: val.forks,
-				watchers: val.watchers,
+				stars: val.watchers,
 				language: val.language || "Unknown",
 				has_issues: val.has_issues,
 				open_issues: val.open_issues,

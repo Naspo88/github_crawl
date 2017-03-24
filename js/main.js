@@ -5,23 +5,29 @@
 	app.controller("SearchUser", function ($scope) {
 
 		/* Scope init */
-		$scope.search = "";
+		$scope.orderingTypes = orderingTypes;
+		$scope.dirOption = boolSelectOpt;
 		$scope.var = {
 			currPage: 1,
 			elForPage: 5,
 			nPages: [1],
 			text: "",
 			user: {},
-			repos: {},
+			repos: [],
 			have_user: null,
 			have_repo: null,
-			exceed: false
+			exceed: false,
+			search: "",
+			sortBy: "name",
+			sortAsc: false
 		};
 	
 
 		$scope.searchTxt = function () {
 			$scope.var.currPage = 1;
-			$scope.search = "";
+			$scope.var.search = "";
+			$scope.var.sortBy = "name";
+			$scope.var.sortAsc = false;
 
 			ajaxCall.getUser($scope.var.text, function (data) {
 
@@ -36,7 +42,8 @@
 							console.log(repos);
 							$scope.var.have_repo = true;
 							$scope.var.repos = repos;
-
+							$scope.var.nPages = global_fn.getPages($scope.var.repos.length, $scope.var.elForPage);
+							
 							$scope.$apply();
 						});
 					} else {
@@ -53,8 +60,9 @@
 			});
 		};
 
-		$scope.$watch('search', function () {
-			var len = global_fn.getFilterLength($scope.var.repos, $scope.search);
+		$scope.$watch('var.search', function () {
+			$scope.var.currPage = 1;
+			var len = global_fn.getFilterLength($scope.var.repos, $scope.var.search);
 			$scope.var.nPages = global_fn.getPages(len, $scope.var.elForPage);
 		});
 	});
@@ -64,8 +72,6 @@
 		return {
 			restrict: "E",
 			templateUrl: "html/repository_elem.html"
-			// controller: function ($scope) {
-			// }
 		}
 	});
 

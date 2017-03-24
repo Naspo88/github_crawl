@@ -100,3 +100,7 @@ h4 a {
 .filters {
 	margin-bottom: 10px;
 }
+
+.filters div {
+	margin-bottom: 5px;
+}
