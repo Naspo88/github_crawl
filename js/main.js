@@ -14,8 +14,8 @@
 			text: "",
 			user: {},
 			repos: [],
-			have_user: null,
-			have_repo: null,
+			has_user: null,
+			has_repo: null,
 			exceed: false,
 			search: "",
 			sortBy: "name",
@@ -33,27 +33,27 @@
 
 				if (!data.exceed) {
 					$scope.var.user = data;
-					$scope.var.have_user = !$.isEmptyObject(data);
+					$scope.var.has_user = !$.isEmptyObject(data);
 					$scope.var.text = "";
 					$('#customer').blur();
 
 					if (data.repositories > 0) {
 						ajaxCall.getRepos(data.repos_url, function (repos) {
 							console.log(repos);
-							$scope.var.have_repo = true;
+							$scope.var.has_repo = true;
 							$scope.var.repos = repos;
 							$scope.var.nPages = global_fn.getPages($scope.var.repos.length, $scope.var.elForPage);
 							
 							$scope.$apply();
 						});
 					} else {
-						$scope.var.have_repo = false;
+						$scope.var.has_repo = false;
 
 						$scope.$apply();
 					}
 				} else {
 					$scope.var.text = "";
-					$scope.var.have_user = false;
+					$scope.var.has_user = false;
 					$scope.var.exceed = true;
 				}
 

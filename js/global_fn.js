@@ -94,7 +94,7 @@ var ajaxCall = {
 	getUser: function (user, cb) {
 		var datas = {
 			method: "GET",
-			url: s_url + "users/" + user
+			url: s_url + "users/" + $.trim(user)
 		};
 		var fn = {
 			done: function (data) {
